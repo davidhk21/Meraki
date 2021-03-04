@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
+const db = require('../database/dbFunctions.js');
 
 const verifyToken = require('./middleware/verifyToken.js');
 
@@ -38,16 +39,23 @@ app.delete('/logout', (req, res) => {
 
 app.post('/login', (req, res) => {
   // mock user, encrypt password with bcrypt, then get user from database
-  const user = {
-    id: 1,
-    username: 'david',
-    email: 'davidhk21@gmail.com',
-  };
+  db.findUser(req.body.email, (err, data) => {
+    if (err) {
+      console.err(err);
+      res.status(404).send(err);
+    }
+    res.status(200).send(data);
+  });
+  // const user = {
+  //   id: 1,
+  //   username: 'david',
+  //   email: 'davidhk21@gmail.com',
+  // };
 
-  const accessToken = generateAccessToken(user);
-  const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET);
-  // ADD REFRESH TOKEN TO DATABASE *************
-  res.json({ accessToken, refreshToken });
+  // const accessToken = generateAccessToken(user);
+  // const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET);
+  // // ADD REFRESH TOKEN TO DATABASE *************
+  // res.json({ accessToken, refreshToken });
 });
 
 function generateAccessToken(user) {

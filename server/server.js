@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
+const db = require('../database/index.js');
 
 const verifyToken = require('./middleware/verifyToken.js');
 
