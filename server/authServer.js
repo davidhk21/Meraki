@@ -33,34 +33,41 @@ app.post('/signup', (req, res) => {
 });
 
 app.delete('/logout', (req, res) => {
-  // DELETE REFRESH TOKEN FROM DATABASE
-  res.sendStatus(204);
+  // delete refresh token from database
+  db.deleteRefreshToken(req.body.token, (err, data) => {
+    if (err) {
+      console.error(err);
+      res.sendStatus(404);
+    }
+    res.sendStatus(204);
+    // REDIRECT BACK TO WELCOME PAGE
+  });
 });
 
 app.post('/login', (req, res) => {
-  // mock user, encrypt password with bcrypt, then get user from database
-
   db.findUser(req.body, (err, data) => {
     if (err) {
       console.error(err);
-      console.log('WAHOOOOOO');
-      res.status(404).send(err);
+      res.sendStatus(404);
     }
-    res.send(data);
+
+    const payload = {
+      id: data.id,
+      firstName: data.first_name,
+      lastName: data.last_name,
+    };
+
+    const accessToken = generateAccessToken(payload);
+    const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET);
+    // add refresh token to database
+    db.addRefreshToken(refreshToken, (error, result) => {
+      if (error) {
+        console.error(error);
+        res.sendStatus(404);
+      }
+      res.json({ accessToken, refreshToken });
+    });
   });
-
-    // res.status(200).send(data);
-
-    // const payload = {
-    //   id: data.id,
-    //   firstName: data.first_name,
-    //   lastName: data.last_name,
-    // };
-
-    // const accessToken = generateAccessToken(payload);
-    // const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET);
-    // // ADD REFRESH TOKEN TO DATABASE *************
-    // res.json({ accessToken, refreshToken });
 });
 
 function generateAccessToken(user) {

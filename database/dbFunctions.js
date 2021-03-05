@@ -21,6 +21,30 @@ const findUser = (user, cb) => {
     });
 };
 
+const addRefreshToken = (token, cb) => {
+  const query = 'INSERT INTO refresh_tokens (token) VALUES ($1);';
+  db.query(query, [token])
+    .then(res => {
+      cb(null, res);
+    })
+    .catch(err => {
+      cb(err, null);
+    });
+};
+
+const deleteRefreshToken = (token, cb) => {
+  const query = 'DELETE FROM refresh_tokens WHERE token = ($1);';
+  db.query(query, [token])
+    .then(res => {
+      cb(null, res);
+    })
+    .catch(err => {
+      cb(err, null);
+    });
+};
+
 module.exports = {
   findUser,
+  addRefreshToken,
+  deleteRefreshToken,
 };
