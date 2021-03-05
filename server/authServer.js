@@ -17,11 +17,22 @@ app.use(express.urlencoded({ extended: true }));
 app.post('/token', (req, res) => {
   const refreshToken = req.body.token;
   if (refreshToken == null) return res.sendStatus(401);
-  // DOES DATABASE HAVE REFRESH TOKEN? IF NO, SEND 403 STATUS
-  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
-    // MAKE SURE TO GENERATE ACCESS TOKEN WITH THE PROPERTIES NEEDED
-    const accessToken = generateAccessToken({ id: user.id, username: user.username, email: user.email });
-    res.json({ accessToken });
+  // does database have refresh token? if no, send 403 status
+  db.findRefreshToken(refreshToken, (err, data) => {
+    if (err) {
+      console.error(err);
+      res.sendStatus(403);
+    }
+    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (error, user) => {
+      // MAKE SURE TO GENERATE ACCESS TOKEN WITH THE PROPERTIES NEEDED
+      const payload = {
+        id: user.id,
+        firstName: user.first_name,
+        lastName: user.last_name,
+      };
+      const accessToken = generateAccessToken(payload);
+      res.json({ accessToken });
+    });
   });
 });
 

@@ -43,8 +43,23 @@ const deleteRefreshToken = (token, cb) => {
     });
 };
 
+const findRefreshToken = (token, cb) => {
+  const query = 'SELECT * FROM refresh_tokens WHERE token = $1;';
+  db.query(query, [token])
+    .then(res => {
+      if (res.rows.length === 0) {
+        throw new Error('refresh token does not exist');
+      }
+      cb(null, res);
+    })
+    .catch(err => {
+      cb(err, null);
+    });
+};
+
 module.exports = {
   findUser,
   addRefreshToken,
   deleteRefreshToken,
+  findRefreshToken,
 };
