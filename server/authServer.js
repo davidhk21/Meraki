@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const db = require('../database/dbFunctions.js');
+const bcrypt = require('bcrypt');
 
 const verifyToken = require('./middleware/verifyToken.js');
 
@@ -40,14 +41,19 @@ app.post('/token', (req, res) => {
 
 app.post('/signup', (req, res) => {
   // sign up with first name, last name, email, and password
-  // enter User information into Users table
-  db.signUpUser(req.body, (err, data) => {
-    if (err) {
-      console.error(err);
-      res.sendStatus(404);
-    }
-    res.status(200).send(data);
-    // REDIRECT TO /LOGIN
+  const saltRounds = 10;
+  // hash password with salt first
+  bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
+    req.body.password = hash;
+    // enter User information into Users table
+    db.signUpUser(req.body, (error, data) => {
+      if (error) {
+        console.error(error);
+        res.sendStatus(404);
+      }
+      res.status(200).send(data);
+      // REDIRECT TO /LOGIN
+    });
   });
 });
 

@@ -1,7 +1,6 @@
 const db = require('./index.js');
 
 const signUpUser = (user, cb) => {
-  // HASH AND SALT PASSWORD WITH BCRYPT
   const query = 'INSERT INTO users (first_name, last_name, email, password) VALUES ($1, $2, $3, $4);';
   db.query(query, [user.firstName, user.lastName, user.email, user.password])
     .then(res => {
