@@ -24,11 +24,11 @@ app.post('/token', (req, res) => {
       res.sendStatus(403);
     }
     jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (error, user) => {
-      // MAKE SURE TO GENERATE ACCESS TOKEN WITH THE PROPERTIES NEEDED
+      // make sure to generate access token with the properties needed
       const payload = {
         id: user.id,
-        firstName: user.first_name,
-        lastName: user.last_name,
+        firstName: user.firstName,
+        lastName: user.lastName,
       };
       const accessToken = generateAccessToken(payload);
       res.json({ accessToken });
@@ -67,7 +67,7 @@ app.post('/login', (req, res) => {
       firstName: data.first_name,
       lastName: data.last_name,
     };
-
+    // create access and refresh token
     const accessToken = generateAccessToken(payload);
     const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET);
     // add refresh token to database
@@ -76,6 +76,7 @@ app.post('/login', (req, res) => {
         console.error(error);
         res.sendStatus(404);
       }
+      // send tokens to client
       res.json({ accessToken, refreshToken });
     });
   });
