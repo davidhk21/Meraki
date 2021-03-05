@@ -47,7 +47,7 @@ const addRefreshToken = (token, cb) => {
   const query = 'INSERT INTO refresh_tokens (token) VALUES ($1);';
   db.query(query, [token])
     .then(res => {
-      cb(null, res);
+      cb(null, res.rowCount);
     })
     .catch(err => {
       cb(err, null);
@@ -58,7 +58,7 @@ const deleteRefreshToken = (token, cb) => {
   const query = 'DELETE FROM refresh_tokens WHERE token = ($1);';
   db.query(query, [token])
     .then(res => {
-      cb(null, res);
+      cb(null, res.rowCount);
     })
     .catch(err => {
       cb(err, null);
@@ -72,7 +72,7 @@ const findRefreshToken = (token, cb) => {
       if (res.rows.length === 0) {
         throw new Error('refresh token does not exist');
       }
-      cb(null, res);
+      cb(null, res.rows[0]);
     })
     .catch(err => {
       cb(err, null);

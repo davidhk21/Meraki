@@ -19,6 +19,7 @@
         "react"
     ],
     "rules": {
-        "arrow-parens": "off"
+        "arrow-parens": "off",
+        "consistent-return": "off"
     }
 }

@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const db = require('../database/dbFunctions.js');
+const { generateAccessToken } = require('./utils/auth.js');
 
 const app = express();
 app.use(cors());
@@ -21,7 +22,7 @@ app.post('/token', (req, res) => {
   if (refreshToken == null) return res.sendStatus(401);
   // does database have refresh token? if no, send 403 status
   db.findRefreshToken(refreshToken, (err, data) => {
-    if (err) {
+    if (err || data === undefined) {
       console.error(err);
       res.sendStatus(403);
     }
@@ -52,7 +53,7 @@ app.post('/signup', (req, res) => {
 app.delete('/logout', (req, res) => {
   // delete refresh token from database
   db.deleteRefreshToken(req.body.token, (err, data) => {
-    if (err) {
+    if (err || data !== 1) {
       console.error(err);
       res.sendStatus(404);
     }
@@ -78,19 +79,16 @@ app.post('/login', (req, res) => {
     const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET);
     // add refresh token to database
     db.addRefreshToken(refreshToken, (error, result) => {
-      if (error) {
+      if (error || result !== 1) {
         console.error(error);
         res.sendStatus(404);
       }
       // send tokens to client
       res.json({ accessToken, refreshToken });
+      // REDIRECT TO THE DASHBOARD PAGE
     });
   });
 });
-
-function generateAccessToken(user) {
-  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '30s' });
-}
 
 const PORT = 4000;
 
