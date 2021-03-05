@@ -39,24 +39,28 @@ app.delete('/logout', (req, res) => {
 
 app.post('/login', (req, res) => {
   // mock user, encrypt password with bcrypt, then get user from database
+
   db.findUser(req.body, (err, data) => {
     if (err) {
-      console.err(err);
-      res.sendStatus(404);
+      console.error(err);
+      console.log('WAHOOOOOO');
+      res.status(404).send(err);
     }
+    res.send(data);
+  });
+
     // res.status(200).send(data);
 
-    const payload = {
-      id: data.id,
-      firstName: data.first_name,
-      lastName: data.last_name,
-    };
+    // const payload = {
+    //   id: data.id,
+    //   firstName: data.first_name,
+    //   lastName: data.last_name,
+    // };
 
-    const accessToken = generateAccessToken(payload);
-    const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET);
-    // ADD REFRESH TOKEN TO DATABASE *************
-    res.json({ accessToken, refreshToken });
-  });
+    // const accessToken = generateAccessToken(payload);
+    // const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET);
+    // // ADD REFRESH TOKEN TO DATABASE *************
+    // res.json({ accessToken, refreshToken });
 });
 
 function generateAccessToken(user) {

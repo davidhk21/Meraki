@@ -19,5 +19,6 @@
         "react"
     ],
     "rules": {
+        "arrow-parens": "off"
     }
 }
