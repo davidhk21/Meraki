@@ -3,9 +3,6 @@ const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const db = require('../database/dbFunctions.js');
-const bcrypt = require('bcrypt');
-
-const verifyToken = require('./middleware/verifyToken.js');
 
 const app = express();
 app.use(cors());
@@ -15,7 +12,9 @@ app.use(express.urlencoded({ extended: true }));
 
 // ********** ROUTES ********** //
 
-// LATER ADD APIS FOR WHEN YOU'RE LOGGED IN BUT GO TO EITHER WELCOME PAGE, SIGN UP PAGE, OR LOGIN PAGE, YOU AUTOMATICALLY REDIRECT TO /DASHBOARD TO AVOID MULTIPLE CREATIONS OF REFRESH TOKENS
+// LATER ADD APIS FOR WHEN YOU'RE LOGGED IN BUT GO TO EITHER
+// WELCOME PAGE, SIGN UP PAGE, OR LOGIN PAGE, YOU AUTOMATICALLY
+// REDIRECT TO /DASHBOARD TO AVOID MULTIPLE CREATIONS OF REFRESH TOKENS
 
 app.post('/token', (req, res) => {
   const refreshToken = req.body.token;
@@ -40,20 +39,13 @@ app.post('/token', (req, res) => {
 });
 
 app.post('/signup', (req, res) => {
-  // sign up with first name, last name, email, and password
-  const saltRounds = 10;
-  // hash password with salt first
-  bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
-    req.body.password = hash;
-    // enter User information into Users table
-    db.signUpUser(req.body, (error, data) => {
-      if (error) {
-        console.error(error);
-        res.sendStatus(404);
-      }
-      res.status(200).send(data);
-      // REDIRECT TO /LOGIN
-    });
+  db.signUpUser(req.body, (error, data) => {
+    if (error) {
+      console.error(error);
+      res.sendStatus(404);
+    }
+    res.status(200).send(data);
+    // REDIRECT TO /LOGIN
   });
 });
 

@@ -1,10 +1,18 @@
+const bcrypt = require('bcrypt');
 const db = require('./index.js');
 
 const signUpUser = (user, cb) => {
-  const query = 'INSERT INTO users (first_name, last_name, email, password) VALUES ($1, $2, $3, $4);';
-  db.query(query, [user.firstName, user.lastName, user.email, user.password])
-    .then(res => {
-      cb(null, res);
+  const saltRounds = 10;
+  bcrypt.hash(user.password, saltRounds)
+    .then(hash => {
+      const query = 'INSERT INTO users (first_name, last_name, email, password) VALUES ($1, $2, $3, $4);';
+      db.query(query, [user.firstName, user.lastName, user.email, hash])
+        .then(res => {
+          cb(null, res);
+        })
+        .catch(err => {
+          cb(err, null);
+        });
     })
     .catch(err => {
       cb(err, null);
@@ -19,13 +27,16 @@ const findUser = (user, cb) => {
         throw new Error('No account with email exists');
       }
       const userInfo = res.rows[0];
-      // bycrpt password from db and compare
+      // bcrypt password from db and compare
+      bcrypt.compare(user.password, userInfo.password)
+        .then(result => {
+          if (result) {
+            cb(null, res.rows[0]);
+          } else {
+            throw new Error('Password does not match');
+          }
+        });
       // if same, send back, else throw error
-      if (userInfo.password === user.password) {
-        cb(null, res.rows[0]);
-      } else {
-        throw new Error('Password does not match');
-      }
     })
     .catch(err => {
       cb(err, null);
