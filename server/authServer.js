@@ -14,6 +14,8 @@ app.use(express.urlencoded({ extended: true }));
 
 // ********** ROUTES ********** //
 
+// LATER ADD APIS FOR WHEN YOU'RE LOGGED IN BUT GO TO EITHER WELCOME PAGE, SIGN UP PAGE, OR LOGIN PAGE, YOU AUTOMATICALLY REDIRECT TO /DASHBOARD TO AVOID MULTIPLE CREATIONS OF REFRESH TOKENS
+
 app.post('/token', (req, res) => {
   const refreshToken = req.body.token;
   if (refreshToken == null) return res.sendStatus(401);
@@ -38,9 +40,15 @@ app.post('/token', (req, res) => {
 
 app.post('/signup', (req, res) => {
   // sign up with first name, last name, email, and password
-  // hash and salt password with bcrypt
   // enter User information into Users table
-  // redirect to /login
+  db.signUpUser(req.body, (err, data) => {
+    if (err) {
+      console.error(err);
+      res.sendStatus(404);
+    }
+    res.status(200).send(data);
+    // REDIRECT TO /LOGIN
+  });
 });
 
 app.delete('/logout', (req, res) => {
