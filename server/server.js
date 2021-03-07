@@ -14,6 +14,12 @@ app.use(express.static(path.join(__dirname, '/../client/dist')));
 
 // ********** ROUTES ********** //
 
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, '/../client/dist/index.html'), (err) => {
+    if (err) res.status(500).send(err)
+  })
+})
+
 app.post('/dashboard', verifyToken, (req, res) => {
   res.send(req.user);
 });
