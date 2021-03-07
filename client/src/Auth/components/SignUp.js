@@ -1,6 +1,8 @@
 import React, { useReducer } from 'react';
+import axios from 'axios';
+import PropTypes from 'prop-types';
 
-const SignUp = () => {
+const SignUp = (props) => {
   const initialValues = {
     firstName: '',
     lastName: '',
@@ -21,26 +23,38 @@ const SignUp = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    // send post request to /signup with form values
     console.log(formValues);
+    axios.post('http://localhost:4000/signup', formValues)
+      .then(res => {
+        console.log(res);
+        console.log('User has been signed up!');
+        props.history.push('/login');
+      })
+      .catch(err => {
+        console.error(err);
+        console.log('There has been an error with signing up');
+      });
+    setFormValues(initialValues);
   };
 
   return (
     <div>
       <h1>Sign Up Page!</h1>
       <form onSubmit={handleSubmit}>
-        <label>
+        <label htmlFor="first-name">
           First Name:
           <input type="text" name="firstName" value={firstName} onChange={handleFormChange} />
         </label>
-        <label>
+        <label htmlFor="last-name">
           Last Name:
           <input type="text" name="lastName" value={lastName} onChange={handleFormChange} />
         </label>
-        <label>
+        <label htmlFor="email">
           Email:
           <input type="text" name="email" value={email} onChange={handleFormChange} />
         </label>
-        <label>
+        <label htmlFor="password">
           Password:
           <input type="text" name="password" value={password} onChange={handleFormChange} />
         </label>
@@ -48,6 +62,10 @@ const SignUp = () => {
       </form>
     </div>
   );
+};
+
+SignUp.propTypes = {
+  history: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
 
 export default SignUp;

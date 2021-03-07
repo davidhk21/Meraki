@@ -45,7 +45,6 @@ app.post('/signup', (req, res) => {
       res.sendStatus(404);
     }
     res.status(200).send(data);
-    // REDIRECT TO /LOGIN
   });
 });
 
