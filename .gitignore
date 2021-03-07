@@ -1,2 +1,9 @@
+# node modules
 node_modules
+
+# Environment Variables
 .env
+
+# Bundles
+client/dist/bundle.js
+client/dist/bundle.js.LICENSE.txt
