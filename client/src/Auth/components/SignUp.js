@@ -23,8 +23,6 @@ const SignUp = (props) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // send post request to /signup with form values
-    console.log(formValues);
     axios.post('http://localhost:4000/signup', formValues)
       .then(res => {
         console.log(res);
@@ -33,7 +31,6 @@ const SignUp = (props) => {
       })
       .catch(err => {
         console.error(err);
-        console.log('There has been an error with signing up');
       });
     setFormValues(initialValues);
   };
@@ -52,7 +49,7 @@ const SignUp = (props) => {
         </label>
         <label htmlFor="email">
           Email:
-          <input type="text" name="email" value={email} onChange={handleFormChange} />
+          <input type="email" name="email" value={email} onChange={handleFormChange} />
         </label>
         <label htmlFor="password">
           Password:
