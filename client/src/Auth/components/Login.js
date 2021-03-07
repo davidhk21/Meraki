@@ -1,4 +1,5 @@
 import React, { useReducer } from 'react';
+import axios from 'axios';
 
 const Login = () => {
   const initialValues = {
@@ -19,7 +20,14 @@ const Login = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(formValues);
+    axios.post('http://localhost:4000/login', formValues)
+      .then(res => {
+        console.log('response: ', res);
+        console.log('User has been logged in!');
+      })
+      .catch(err => {
+        console.error(err);
+      });
     setFormValues(initialValues);
   };
 
