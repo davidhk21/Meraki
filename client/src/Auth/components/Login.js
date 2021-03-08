@@ -22,8 +22,11 @@ const Login = () => {
     event.preventDefault();
     axios.post('http://localhost:4000/login', formValues)
       .then(res => {
-        console.log('response: ', res);
+        // console.log('response: ', res.request);
         console.log('User has been logged in!');
+        // const { accessToken, refreshToken } = res.data;
+        // document.cookie = `refreshToken=${refreshToken}`;
+        // props.history.push('/dashboard');
       })
       .catch(err => {
         console.error(err);

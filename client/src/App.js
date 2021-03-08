@@ -1,14 +1,26 @@
 import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
-import Authorization from './Auth/Authorization';
+import { Route } from 'react-router-dom';
+
+import Welcome from './Auth/components/Welcome';
+import SignUp from './Auth/components/SignUp';
+import Login from './Auth/components/Login';
 
 const App = () => {
   return (
-    <BrowserRouter>
-      <div>
-        <Authorization />
-      </div>
-    </BrowserRouter>
+    <div>
+      <header>
+        <nav>
+          <ul>
+            <li><a href="/">Welcome</a></li>
+            <li><a href="/signup">Sign Up</a></li>
+            <li><a href="/login">Login</a></li>
+          </ul>
+        </nav>
+      </header>
+      <Route path="/" exact component={Welcome} />
+      <Route path="/signup" exact component={SignUp} />
+      <Route path="/login" exact component={Login} />
+    </div>
   );
 };
 

@@ -20,7 +20,7 @@ app.get('/*', (req, res) => {
   });
 });
 
-app.post('/dashboard', verifyToken, (req, res) => {
+app.get('/dashboard', verifyToken, (req, res) => {
   res.send(req.user);
 });
 
