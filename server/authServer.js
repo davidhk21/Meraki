@@ -48,7 +48,7 @@ app.post('/signup', (req, res) => {
   });
 });
 
-app.delete('/logout', (req, res) => {
+app.post('/logout', (req, res) => {
   // delete refresh token from database
   console.log(req.body.token);
   db.deleteRefreshToken(req.body.token, (err, data) => {

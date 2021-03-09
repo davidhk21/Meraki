@@ -10,7 +10,9 @@ const Dashboard = (props) => {
     const options = {
       token: refreshToken,
     };
-    axios.delete('http://localhost:4000/logout', { data: options })
+    axios.post('http://localhost:4000/logout', options, {
+      withCredentials: true,
+    })
       .then(res => {
         console.log('Success!', res);
         props.history.push('/');
