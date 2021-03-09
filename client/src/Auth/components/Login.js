@@ -1,7 +1,7 @@
 import React, { useReducer } from 'react';
 import axios from 'axios';
 
-const Login = () => {
+const Login = (props) => {
   const initialValues = {
     email: '',
     password: '',
@@ -28,7 +28,7 @@ const Login = () => {
         console.log('User has been logged in!');
         // const { accessToken, refreshToken } = res.data;
         // document.cookie = `refreshToken=${refreshToken}`;
-        // props.history.push('/dashboard');
+        props.history.push('/dashboard');
       })
       .catch(err => {
         console.error(err);

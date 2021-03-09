@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const jwt = require('jsonwebtoken');
-const cors = require('./middleware/cors.js');
+const cors = require('./middleware/corsAuth.js');
 const db = require('../database/dbFunctions.js');
 const { generateAccessToken } = require('./utils/auth.js');
 
@@ -50,14 +50,15 @@ app.post('/signup', (req, res) => {
 
 app.delete('/logout', (req, res) => {
   // delete refresh token from database
+  console.log(req.body.token);
   db.deleteRefreshToken(req.body.token, (err, data) => {
     if (err || data !== 1) {
       console.error(err);
-      res.sendStatus(404);
+      return res.sendStatus(404);
     }
-    res.sendStatus(204);
     res.clearCookie('accessToken');
     res.clearCookie('refreshToken');
+    res.sendStatus(204);
     // REDIRECT BACK TO WELCOME PAGE
   });
 });
@@ -86,8 +87,8 @@ app.post('/login', (req, res) => {
       // send tokens to client
       res.cookie('accessToken', accessToken);
       res.cookie('refreshToken', refreshToken);
-      res.sendStatus(200);
       // REDIRECT TO THE DASHBOARD PAGE
+      res.sendStatus(200);
     });
   });
 });
