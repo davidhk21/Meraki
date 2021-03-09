@@ -5,6 +5,8 @@ import Welcome from './Auth/components/Welcome';
 import SignUp from './Auth/components/SignUp';
 import Login from './Auth/components/Login';
 
+import Dashboard from './Resource/Dashboard';
+
 const App = () => {
   return (
     <div>
@@ -20,6 +22,7 @@ const App = () => {
       <Route path="/" exact component={Welcome} />
       <Route path="/signup" exact component={SignUp} />
       <Route path="/login" exact component={Login} />
+      <Route path="/dashboard" exact component={Dashboard} />
     </div>
   );
 };

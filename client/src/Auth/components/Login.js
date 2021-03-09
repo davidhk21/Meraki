@@ -20,7 +20,9 @@ const Login = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    axios.post('http://localhost:4000/login', formValues)
+    axios.post('http://localhost:4000/login', formValues, {
+      withCredentials: true,
+    })
       .then(res => {
         // console.log('response: ', res.request);
         console.log('User has been logged in!');

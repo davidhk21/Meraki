@@ -1,14 +1,14 @@
 require('dotenv').config();
 const express = require('express');
-const cors = require('cors');
 const jwt = require('jsonwebtoken');
+const cors = require('./middleware/cors.js');
 const db = require('../database/dbFunctions.js');
 const { generateAccessToken } = require('./utils/auth.js');
 
 const app = express();
-app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors);
 
 // ********** ROUTES ********** //
 
@@ -56,6 +56,8 @@ app.delete('/logout', (req, res) => {
       res.sendStatus(404);
     }
     res.sendStatus(204);
+    res.clearCookie('accessToken');
+    res.clearCookie('refreshToken');
     // REDIRECT BACK TO WELCOME PAGE
   });
 });
@@ -82,7 +84,9 @@ app.post('/login', (req, res) => {
         res.sendStatus(404);
       }
       // send tokens to client
-      res.json({ accessToken, refreshToken });
+      res.cookie('accessToken', accessToken);
+      res.cookie('refreshToken', refreshToken);
+      res.sendStatus(200);
       // REDIRECT TO THE DASHBOARD PAGE
     });
   });

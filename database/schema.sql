@@ -16,5 +16,3 @@ CREATE TABLE users (
 CREATE TABLE refresh_tokens (
   token VARCHAR(255) NOT NULL
 );
-
-INSERT INTO users (first_name, last_name, email, password) VALUES ('David', 'Kim', 'davidhk21@gmail.com', 'password');

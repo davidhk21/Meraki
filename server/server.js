@@ -1,16 +1,16 @@
 require('dotenv').config();
 const path = require('path');
 const express = require('express');
-const cors = require('cors');
+const cookieParser = require('cookie-parser');
 // const db = require('../database/index.js');
 
 const verifyToken = require('./middleware/verifyToken.js');
 
 const app = express();
-app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '/../client/dist')));
+app.use(cookieParser());
 
 // ********** ROUTES ********** //
 
