@@ -20,7 +20,8 @@ app.get('/*', (req, res) => {
   });
 });
 
-app.get('/dashboard', verifyToken, (req, res) => {
+app.get('/dashboard', (req, res) => {
+  console.log('COOKIES!!', req.cookies)
   res.send(req.user);
 });
 
