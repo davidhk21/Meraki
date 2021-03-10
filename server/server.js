@@ -15,14 +15,10 @@ app.use(express.static(path.join(__dirname, '/../client/dist')));
 // ********** ROUTES ********** //
 
 app.get('/*', (req, res) => {
+  console.log('failed lookups!!!')
   res.sendFile(path.join(__dirname, '/../client/dist/index.html'), (err) => {
     if (err) res.status(500).send(err);
   });
-});
-
-app.get('/dashboard', (req, res) => {
-  console.log('COOKIES!!', req.cookies)
-  res.send(req.user);
 });
 
 const PORT = 3000;
