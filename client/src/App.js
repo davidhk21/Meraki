@@ -8,6 +8,7 @@ import Login from './Auth/components/Login';
 
 import Dashboard from './Resource/Dashboard';
 import PrivateRoute from './Resource/PrivateRoute';
+import PublicRoute from './Auth/PublicRoute';
 
 const App = () => {
   const [loading, setLoading] = useState(true);
@@ -15,7 +16,7 @@ const App = () => {
 
   const fetchAccessToken = () => {
     const accessToken = Cookies.get('accessToken');
-    console.log(accessToken);
+    console.log('ACCESS TOKEN: ', accessToken);
     if (accessToken) setAuthenticated(accessToken);
     setLoading(false);
   };
@@ -40,16 +41,10 @@ const App = () => {
             </nav>
           </header>
           <Switch>
-            <Route path="/" exact component={Welcome} />
-            <Route path="/signup" exact component={SignUp} />
-            <Route
-              path="/login"
-              exact
-              render={(props) => (
-                <Login {...props} setAuthenticated={setAuthenticated} />
-              )}
-            />
-            <PrivateRoute path="/dashboard" component={Dashboard} authenticated={authenticated} />
+            <PublicRoute path="/" exact component={Welcome} authenticated={authenticated} />
+            <PublicRoute path="/signup" exact component={SignUp} authenticated={authenticated} />
+            <PublicRoute path="/login" exact component={Login} authenticated={authenticated} setAuthenticated={setAuthenticated} />
+            <PrivateRoute path="/dashboard" component={Dashboard} authenticated={authenticated} setAuthenticated={setAuthenticated} />
           </Switch>
         </div>
       )}

@@ -1,12 +1,10 @@
 import React from 'react';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 const Dashboard = (props) => {
   const handleLogout = () => {
-    const refreshToken = document.cookie
-      .split('; ')
-      .find(row => row.startsWith('refreshToken='))
-      .split('=')[1];
+    const refreshToken = Cookies.get('refreshToken');
     const options = {
       token: refreshToken,
     };
@@ -15,6 +13,7 @@ const Dashboard = (props) => {
     })
       .then(res => {
         console.log('Success!', res);
+        props.setAuthenticated(false);
         props.history.push('/');
       })
       .catch(err => {
