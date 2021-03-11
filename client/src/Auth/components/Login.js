@@ -25,10 +25,6 @@ const Login = (props) => {
       withCredentials: true,
     })
       .then(res => {
-        // console.log('response: ', res.request);
-        console.log('User has been logged in!');
-        // const { accessToken, refreshToken } = res.data;
-        // document.cookie = `refreshToken=${refreshToken}`;
         const accessToken = Cookies.get('accessToken');
         if (accessToken) props.setAuthenticated(accessToken);
         props.history.push('/dashboard');
