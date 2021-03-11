@@ -7,6 +7,7 @@ import SignUp from './Auth/components/SignUp';
 import Login from './Auth/components/Login';
 
 import Dashboard from './Resource/Dashboard';
+import PrivateRoute from './Resource/PrivateRoute';
 
 const App = () => {
   const [loading, setLoading] = useState(true);
@@ -48,13 +49,7 @@ const App = () => {
                 <Login {...props} setAuthenticated={setAuthenticated} />
               )}
             />
-            {
-              authenticated ? (
-                <>
-                  <Route path="/dashboard" exact component={Dashboard} />
-                </>
-              ) : <Redirect to="/login" />
-            }
+            <PrivateRoute path="/dashboard" component={Dashboard} authenticated={authenticated} />
           </Switch>
         </div>
       )}
