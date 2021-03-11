@@ -23,6 +23,7 @@
         "consistent-return": "off",
         "react/jsx-filename-extension": [1, {"extensions": [".js", ".jsx"] }],
         "arrow-body-style": "off",
-        "object-curly-newline": "off"
+        "object-curly-newline": "off",
+        "react/jsx-props-no-spreading": "off",
     }
 }
