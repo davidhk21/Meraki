@@ -1,5 +1,6 @@
 import React, { useReducer } from 'react';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 const Login = (props) => {
   const initialValues = {
@@ -28,6 +29,8 @@ const Login = (props) => {
         console.log('User has been logged in!');
         // const { accessToken, refreshToken } = res.data;
         // document.cookie = `refreshToken=${refreshToken}`;
+        const accessToken = Cookies.get('accessToken');
+        if (accessToken) props.setAuthenticated(accessToken);
         props.history.push('/dashboard');
       })
       .catch(err => {
