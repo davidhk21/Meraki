@@ -84,7 +84,8 @@ app.post('/login', (req, res) => {
         res.sendStatus(404);
       }
       // send tokens to client
-      res.cookie('accessToken', accessToken);
+      const expire = 60 * 60 * 1000 * 2;
+      res.cookie('accessToken', accessToken, { maxAge: expire });
       res.cookie('refreshToken', refreshToken);
       // REDIRECT TO THE DASHBOARD PAGE
       res.sendStatus(200);

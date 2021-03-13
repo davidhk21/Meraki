@@ -16,7 +16,6 @@ const App = () => {
 
   const fetchAccessToken = () => {
     const accessToken = Cookies.get('accessToken');
-    console.log('ACCESS TOKEN: ', accessToken);
     if (accessToken) setAuthenticated(accessToken);
     setLoading(false);
   };
