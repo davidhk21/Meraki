@@ -2,6 +2,8 @@ import React, { useReducer } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
+import { connect } from 'react-redux';
+
 const Login = (props) => {
   const initialValues = {
     email: '',
@@ -49,8 +51,37 @@ const Login = (props) => {
         </label>
         <input type="submit" value="submit" />
       </form>
+      <div>
+        {props.ctr}
+      </div>
+      <button onClick={props.onIncrementCounter}>
+        increment counter
+      </button>
+      <button onClick={props.onStoreResult}>
+        store result
+      </button>
+      <ul>
+        {props.storedResults.map(strResult => (
+          <li key={strResult.id} onClick={() => props.onDeleteResult(strResult.id)}>{strResult.value}</li>
+        ))}
+      </ul>
     </div>
   );
 };
 
-export default Login;
+const mapStateToProps = state => {
+  return {
+    ctr: state.counter,
+    storedResults: state.results,
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onIncrementCounter: () => dispatch({type: 'INCREMENT', val: 5}),
+    onStoreResult: () => dispatch({ type: 'STORE_RESULT'}),
+    onDeleteResult: (id) => dispatch({ type: 'DELETE_RESULT', resultElId: id})
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
