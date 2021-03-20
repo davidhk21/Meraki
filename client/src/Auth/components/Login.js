@@ -3,6 +3,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 import { connect } from 'react-redux';
+import * as actionTypes from '../../store/actions.js';
 
 const Login = (props) => {
   const initialValues = {
@@ -57,7 +58,7 @@ const Login = (props) => {
       <button onClick={props.onIncrementCounter}>
         increment counter
       </button>
-      <button onClick={props.onStoreResult}>
+      <button onClick={() => props.onStoreResult(props.ctr)}>
         store result
       </button>
       <ul>
@@ -71,16 +72,16 @@ const Login = (props) => {
 
 const mapStateToProps = state => {
   return {
-    ctr: state.counter,
-    storedResults: state.results,
+    ctr: state.ctr.counter,
+    storedResults: state.res.results,
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    onIncrementCounter: () => dispatch({type: 'INCREMENT', val: 5}),
-    onStoreResult: () => dispatch({ type: 'STORE_RESULT'}),
-    onDeleteResult: (id) => dispatch({ type: 'DELETE_RESULT', resultElId: id})
+    onIncrementCounter: () => dispatch({ type: actionTypes.INCREMENT, val: 5 }),
+    onStoreResult: (result) => dispatch({ type: actionTypes.STORE_RESULT, result }),
+    onDeleteResult: (id) => dispatch({ type: actionTypes.DELETE_RESULT, resultElId: id }),
   }
 }
 
